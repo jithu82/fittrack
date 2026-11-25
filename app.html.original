@@ -1,0 +1,1829 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitTrack Pro | Fitness Tracker</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+:root {
+    --primary: #14263D;
+    --primary-light: #213D5B;
+    --accent: #0F9D91;
+    --accent-hover: #0B8279;
+    --background: #F4F7FA;
+    --surface: #FFFFFF;
+    --text: #243247;
+    --muted: #718096;
+    --border: #DCE4EC;
+    --success: #16845B;
+    --danger: #D64545;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 16px;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    transition: background .2s, transform .2s;
+}
+
+button:hover {
+    background: var(--accent-hover);
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 13px;
+    margin: 7px 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px #0F9D911A;
+}
+
+h1, h2, h3 {
+    color: var(--primary);
+    margin-bottom: 12px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* LOGIN AND REGISTRATION */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+        radial-gradient(ellipse at top right, #0F9D9122, transparent 45%),
+        linear-gradient(135deg, #EAF0F6, #F7F9FC);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    padding: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px #14263D12;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: 750;
+    letter-spacing: -.7px;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.full {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.switch-auth {
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.switch-auth:hover {
+    text-decoration: underline;
+}
+
+/* APPLICATION LAYOUT */
+
+.app-layout {
+    min-height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    padding: 25px 16px;
+    background: var(--primary);
+    color: white;
+}
+
+.sidebar .logo {
+    color: white;
+    font-size: 23px;
+    margin: 0 0 28px 8px;
+}
+
+.nav-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 5px 0;
+    padding: 12px 14px;
+    background: transparent;
+    color: #D8E2EF;
+    border-radius: 9px;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: var(--primary-light);
+    color: white;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    background: white;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.content {
+    padding: 30px;
+    max-width: 1450px;
+    margin: auto;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* CARDS AND METRICS */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+    margin: 22px 0;
+}
+
+.card {
+    background: white;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px #14263D06;
+    margin-bottom: 20px;
+}
+
+.metric {
+    font-size: 31px;
+    font-weight: 750;
+    color: var(--primary);
+    margin: 10px 0 5px;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.progress-track {
+    height: 10px;
+    background: #E8EEF4;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width .3s;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    background: white;
+}
+
+th, td {
+    text-align: left;
+    padding: 13px 9px;
+    border-bottom: 1px solid var(--border);
+    overflow-wrap: anywhere;
+}
+
+th {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.small-btn {
+    padding: 8px 11px;
+    font-size: 12px;
+    margin: 2px;
+}
+
+.danger {
+    background: var(--danger);
+}
+
+.danger:hover {
+    background: #B93232;
+}
+
+.secondary {
+    background: #64748B;
+}
+
+.secondary:hover {
+    background: #475569;
+}
+
+.badge {
+    display: inline-block;
+    background: #E4F6EF;
+    color: #14734F;
+    padding: 9px 13px;
+    border-radius: 20px;
+    margin: 5px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.notice {
+    background: #EFF6FA;
+    border: 1px solid #DFEAF0;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 12px 0;
+}
+
+
+/* ADMIN DASHBOARD ENHANCEMENTS */
+.admin-heading, .admin-card-heading, .modal-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.admin-heading { margin-bottom:22px; }
+.admin-heading h1 { margin:4px 0 6px; }
+.eyebrow { color:var(--accent); font-size:11px; font-weight:800; letter-spacing:1.5px; }
+.admin-metrics { margin-top:0; }
+.admin-stat { border-top:3px solid var(--accent); }
+.stat-note { color:var(--muted); font-size:12px; }
+.admin-card-heading { margin-bottom:12px; }
+.admin-card-heading h3 { margin-bottom:4px; }
+.result-count { font-size:12px; font-weight:700; color:var(--muted); background:#F0F4F8; padding:7px 10px; border-radius:7px; white-space:nowrap; }
+.admin-filters { display:grid; grid-template-columns:2fr 1fr 1fr; gap:14px; align-items:end; }
+.admin-filters label { font-size:13px; font-weight:650; color:var(--text); }
+.admin-filters input, .admin-filters select { margin-bottom:8px; }
+.table-wrap { width:100%; overflow-x:auto; }
+.table-wrap table { min-width:850px; }
+.status-pill { display:inline-block; border-radius:20px; padding:4px 9px; font-size:12px; font-weight:700; }
+.status-active { background:#E4F6EF; color:#14734F; }
+.status-inactive { background:#FDECEC; color:#B83232; }
+.action-group { display:flex; flex-wrap:wrap; gap:4px; }
+.action-group button { white-space:nowrap; }
+.activity-overview { display:grid; gap:14px; }
+.activity-bar-row { display:grid; grid-template-columns:minmax(100px,1fr) 3fr 45px; align-items:center; gap:12px; font-size:13px; }
+.activity-bar-track { height:9px; background:#E8EEF4; border-radius:99px; overflow:hidden; }
+.activity-bar-fill { height:100%; background:var(--accent); border-radius:99px; }
+.admin-log { display:grid; gap:0; }
+.log-entry { padding:12px 0; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; gap:14px; font-size:13px; }
+.log-entry:last-child { border-bottom:0; }
+.log-time { color:var(--muted); white-space:nowrap; font-size:12px; }
+.modal-backdrop { position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px; background:#0D1B2ACC; }
+.modal-card { width:min(650px,100%); max-height:85vh; overflow:auto; padding:25px; border-radius:16px; background:white; box-shadow:0 20px 70px #0003; }
+.modal-heading { margin-bottom:18px; }
+.detail-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:16px 0; }
+.detail-item { border:1px solid var(--border); border-radius:10px; padding:14px; }
+.detail-item span { display:block; color:var(--muted); font-size:12px; margin-bottom:5px; }
+.detail-item strong { font-size:21px; color:var(--primary); }
+@media (max-width:760px) {
+    .admin-heading, .admin-card-heading { align-items:flex-start; flex-direction:column; }
+    .admin-filters { grid-template-columns:1fr; gap:0; }
+    .detail-grid { grid-template-columns:1fr; }
+    .activity-bar-row { grid-template-columns:90px 1fr 35px; }
+    .log-entry { flex-direction:column; gap:3px; }
+}
+
+@media (max-width: 760px) {
+    .app-layout {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .sidebar .logo {
+        margin-bottom: 12px;
+    }
+
+    .nav-btn {
+        display: inline-block;
+        width: auto;
+        margin: 3px;
+        padding: 9px;
+        font-size: 13px;
+    }
+
+    .content {
+        padding: 16px;
+    }
+
+    .topbar {
+        padding: 16px;
+    }
+
+    .auth-card {
+        padding: 25px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+}
+
+
+/* Workout charts and coach recommendations */
+.chart-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:10px; align-items:end; min-height:190px; padding:18px 4px 4px; }
+.chart-day { display:flex; flex-direction:column; align-items:center; gap:8px; min-width:0; }
+.chart-value { font-size:11px; color:var(--muted); font-weight:700; }
+.chart-bar-track { height:125px; width:min(100%,34px); background:#EDF2F7; border-radius:8px 8px 3px 3px; display:flex; align-items:flex-end; overflow:hidden; }
+.chart-bar { width:100%; min-height:3px; background:linear-gradient(180deg,#25B6A5,var(--accent)); border-radius:7px 7px 2px 2px; }
+.chart-label { font-size:11px; color:var(--muted); }
+.chart-legend { font-size:12px; color:var(--muted); margin-top:8px; }
+.admin-suggestion-form { margin-top:18px; padding:16px; border:1px solid var(--border); border-radius:12px; background:#F8FAFC; }
+.admin-suggestion-form textarea { width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:8px; font:inherit; resize:vertical; margin:8px 0 12px; }
+.recommendation-item { border-left:4px solid var(--accent); padding:12px 14px; margin:10px 0; background:#F0FAF8; border-radius:0 9px 9px 0; }
+.recommendation-item small { display:block; color:var(--muted); margin-top:6px; }
+@media(max-width:560px){.chart-grid{gap:4px}.chart-bar-track{height:95px}.chart-label{font-size:10px}}
+
+.brand-mark{width:25px;height:25px;display:inline-block;vertical-align:-5px;fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;margin-right:6px}.nav-icon{width:18px;height:18px;display:inline-block;vertical-align:-4px;margin-right:8px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.security-note{padding:12px 14px;border:1px solid var(--border);background:#F8FAFC;border-radius:9px;margin:10px 0 16px;font-size:13px;color:var(--muted)}.password-strength{font-size:12px;margin:-8px 0 12px;color:var(--muted)}.badge{margin:5px 6px 5px 0}.feature-value{font-weight:700;color:var(--primary)}
+
+/* FitTrack Pro black-and-red theme */
+
+:root{--primary:#090A0D;--primary-light:#25262D;--accent:#E32636;--accent-hover:#B91C2B;--background:#101115;--surface:#191A20;--text:#F4F4F5;--muted:#A1A1AA;--border:#33343D;--success:#22C55E;--danger:#F04452;}
+body{background:#101115;color:#F4F4F5}
+h1,h2,h3{color:#F5F5F6}
+button{background:#E32636;color:#fff}button:hover{background:#B91C2B}
+input,select,textarea{background:#202127!important;color:#F4F4F5!important;border-color:#3A3B45!important}
+input::placeholder,textarea::placeholder{color:#8E8F99}
+input:focus,select:focus,textarea:focus{border-color:#E32636!important;box-shadow:0 0 0 3px #E3263628!important}
+.auth-page{background:radial-gradient(ellipse at top right,#E3263626,transparent 42%),linear-gradient(135deg,#090A0D,#17181E)}
+.auth-card,.card,.admin-card,.modal-card{background:#191A20!important;color:#F4F4F5;border-color:#33343D!important;box-shadow:0 18px 55px #0005}
+.logo,.detail-item strong{color:#F5F5F6}.switch-auth,.eyebrow{color:#FF5361}
+.sidebar{background:#08090B;border-right:1px solid #292A31}.sidebar .logo{color:#F8F8F9}.nav-btn{color:#C8C8D0}.nav-btn:hover,.nav-btn.active{background:#35151B;color:#FF6875;border-left:3px solid #E32636}
+.topbar{background:#17181E!important;border-color:#33343D!important;color:#F4F4F5}
+.content{color:#F4F4F5}.muted,.stat-note,.chart-label,.chart-value,.log-time,.detail-item span{color:#A1A1AA!important}
+.result-count{background:#25262D;color:#D4D4DA}.activity-bar-track,.progress-track,.chart-bar-track{background:#30313A!important}.activity-bar-fill,.progress-fill,.chart-bar{background:linear-gradient(180deg,#FF5361,#C9182B)!important}
+.status-active{background:#143323!important;color:#6EE7A0!important}.status-inactive{background:#3A151B!important;color:#FF8C96!important}.status-pill{background:#25262D!important;color:#E4E4E7}
+.secondary{background:#292A32!important;color:#E4E4E7!important}.danger{background:#A91928!important;color:#fff!important}
+.notice,.security-note{background:#241519!important;border-color:#63303A!important;color:#F5D7DB!important}
+.recommendation-item,.log-entry,.detail-item,.admin-stat,.metric,.stat,.chart-grid,.grid>div{background:#202127!important;border-color:#353640!important;color:#F4F4F5}
+.table-wrap{border-color:#33343D}table{color:#E4E4E7}th{background:#25262D!important;color:#F4F4F5}td{border-color:#33343D!important}tr:nth-child(even){background:#1D1E24!important}
+.modal-backdrop{background:#000C}.modal-heading{color:#F4F4F5}
+.badge{background:#35151B!important;color:#FF818B!important;border-color:#71303A!important}
+button:disabled{opacity:.5}.hidden{display:none!important}
+@media(max-width:760px){.sidebar{border-right:0;border-bottom:1px solid #292A31}.topbar{padding:16px!important}.content{padding:18px!important}}
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN AND REGISTRATION PAGE -->
+
+<div id="authPage" class="auth-page">
+    <div class="auth-card">
+        <div class="logo"><svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h4l2.2-6 3.5 11 2.2-5H20"/></svg> FitTrack Pro</div>
+        <p class="muted">Your fitness journey starts here.</p>
+
+        <div id="loginForm">
+            <h2 style="margin-top:25px">Welcome Back!</h2>
+
+            <label>Email Address</label>
+            <input id="loginEmail" type="email" placeholder="Enter your email" required>
+
+            <label>Password</label>
+            <input id="loginPassword" type="password" placeholder="Enter your password" required>
+
+            <button class="full" onclick="login()">Login</button>
+
+            <p style="margin-top:18px">
+                New user?
+                <span class="switch-auth" onclick="showRegister()">Create an account</span>
+            </p>
+        </div>
+
+        <div id="registerForm" class="hidden">
+            <h2 style="margin-top:25px">Create Account</h2>
+
+            <label>Full Name</label>
+            <input id="regName" placeholder="Enter your full name">
+
+            <label>Email Address</label>
+            <input id="regEmail" type="email" placeholder="Enter your email">
+
+            <label>Password</label>
+            <input id="regPassword" type="password" minlength="6"
+                   placeholder="At least 6 characters">
+
+            <button class="full" onclick="register()">Create Account</button>
+
+            <p style="margin-top:18px">
+                Already registered?
+                <span class="switch-auth" onclick="showLogin()">Login</span>
+            </p>
+        </div>
+
+        <p id="authMessage" style="margin-top:15px;color:#dc3545"></p>
+
+        <p class="muted" style="margin-top:20px">
+            Demo administrator: admin@fittrack.com<br>
+            Password: Admin123!
+        </p>
+    </div>
+</div>
+
+<!-- MAIN APPLICATION -->
+
+<div id="appPage" class="app-layout hidden">
+
+    <aside class="sidebar">
+        <div class="logo"><svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h4l2.2-6 3.5 11 2.2-5H20"/></svg> FitTrack Pro</div>
+
+        <button class="nav-btn active" data-section="dashboard"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard</button>
+        <button class="nav-btn" data-section="activity"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg> Activity</button>
+        <button class="nav-btn" data-section="nutrition"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9M12 13C5 13 4 7 4 4c5 0 8 2 8 9ZM12 16c0-6 3-9 8-9 0 5-2 9-8 9Z"/></svg> Nutrition</button>
+        <button class="nav-btn" data-section="water"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s7 8 7 12a7 7 0 0 1-14 0c0-4 7-12 7-12Z"/></svg> Water Tracker</button>
+        <button class="nav-btn" data-section="goals"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="m12 12 7-7"/></svg> Goals</button>
+        <button class="nav-btn" data-section="progress"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M8 15l4-4 3 2 5-7"/></svg> Progress & Badges</button>
+        <button class="nav-btn" data-section="profile"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg> Profile</button>
+        <button id="adminNav" class="nav-btn hidden" data-section="admin"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg> Admin Panel</button>
+
+        <button class="nav-btn" onclick="logout()" style="margin-top:25px"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4v16h6M14 8l4 4-4 4M8 12h10"/></svg> Logout</button>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <h2 style="margin:0">Fitness Dashboard</h2>
+                <p class="muted">Small steps, stronger you.</p>
+            </div>
+            <div id="welcomeUser"></div>
+        </header>
+
+        <div class="content">
+
+            <!-- DASHBOARD -->
+
+            <section id="dashboard" class="section active">
+                <h1>Welcome to FitTrack Pro! </h1>
+                <p class="muted">Track your daily activities, nutrition, hydration and goals.</p>
+
+                <div class="grid">
+                    <div class="card">
+                        <p class="muted">Today's Activities</p>
+                        <div class="metric" id="dashActivities">0</div>
+                        <p class="muted">Activities recorded</p>
+                    </div>
+
+                    <div class="card">
+                        <p class="muted">Calories Consumed</p>
+                        <div class="metric" id="dashCalories">0</div>
+                        <p class="muted">kcal today</p>
+                    </div>
+
+                    <div class="card">
+                        <p class="muted">Calories Burned</p>
+                        <div class="metric" id="dashBurned">0</div>
+                        <p class="muted">kcal today</p>
+                    </div>
+
+                    <div class="card">
+                        <p class="muted">Water Intake</p>
+                        <div class="metric" id="dashWater">0</div>
+                        <p class="muted">ml today</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Daily Hydration Goal</h3>
+                    <p id="waterSummary">0 / 2000 ml</p>
+                    <div class="progress-track">
+                        <div id="waterProgress" class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Today's Fitness Tip </h3>
+                    <p id="dailyTip">Stay consistent and remember to drink water.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Personalized Suggestions for You</h3>
+                    <p class="muted">Simple recommendations based on the activity, food, water and goals you record.</p>
+                    <div id="personalizedSuggestions" aria-live="polite"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Suggestions from Your Admin / Fitness Coach</h3>
+                    <p class="muted">Recommendations sent by the administrator after reviewing your records.</p>
+                    <div id="adminSuggestionsForUser"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Your Active Goals</h3>
+                    <div id="dashboardGoals"></div>
+                </div>
+            </section>
+
+            <!-- ACTIVITY -->
+
+            <section id="activity" class="section">
+                <h1>Activity Tracker </h1>
+
+                <div class="card">
+                    <h3>Record an Activity</h3>
+
+                    <form id="activityForm">
+                        <label>Activity Name</label>
+                        <select id="activityType" required>
+                            <option value="Walking">Walking</option>
+                            <option value="Running">Running</option>
+                            <option value="Cycling">Cycling</option>
+                            <option value="Workout">Workout</option>
+                            <option value="Yoga">Yoga</option>
+                            <option value="Swimming">Swimming</option>
+                        </select>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Duration (minutes)</label>
+                                <input id="activityDuration" type="number" min="1" required>
+                            </div>
+                            <div>
+                                <label>Calories Burned (kcal)</label>
+                                <input id="activityBurned" type="number" min="0" required>
+                            </div>
+                        </div>
+
+                        <button type="submit">Save Activity</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Activity History</h3>
+                    <div id="activityHistory"></div>
+                </div>
+            </section>
+
+            <!-- NUTRITION -->
+
+            <section id="nutrition" class="section">
+                <h1>Nutrition Tracker </h1>
+
+                <div class="card">
+                    <h3>Record Food Intake</h3>
+
+                    <form id="foodForm">
+                        <label>Food Item</label>
+                        <input id="foodName" placeholder="e.g. Idli, rice, fruits" required>
+
+                        <label>Calories (kcal)</label>
+                        <input id="foodCalories" type="number" min="1" required>
+
+                        <button type="submit">Add Food</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Today's Food History</h3>
+                    <p id="foodTotal" class="muted"></p>
+                    <div id="foodHistory"></div>
+                </div>
+            </section>
+
+            <!-- WATER TRACKER -->
+
+            <section id="water" class="section">
+                <h1>Water Intake Tracker </h1>
+
+                <div class="card">
+                    <h3>Daily Hydration</h3>
+                    <p>Demo target: 2000 ml per day. Adjust this goal in your own project if needed.</p>
+
+                    <div class="metric"><span id="waterAmount">0</span> ml</div>
+
+                    <div class="progress-track">
+                        <div id="waterProgress2" class="progress-fill"></div>
+                    </div>
+
+                    <button onclick="addWater(250)">+ 250 ml</button>
+                    <button onclick="addWater(500)">+ 500 ml</button>
+                    <button class="secondary" onclick="resetWater()">Reset Today's Water</button>
+
+                    <p id="waterMessage" style="margin-top:15px"></p>
+                </div>
+            </section>
+
+            <!-- GOALS -->
+
+            <section id="goals" class="section">
+                <h1>Fitness Goals </h1>
+
+                <div class="card">
+                    <h3>Create a Goal</h3>
+
+                    <form id="goalForm">
+                        <label>Goal Description</label>
+                        <input id="goalName" placeholder="e.g. Walk 5000 steps" required>
+
+                        <label>Goal Category</label>
+                        <select id="goalCategory">
+                            <option>Activity</option>
+                            <option>Nutrition</option>
+                            <option>Hydration</option>
+                            <option>Workout</option>
+                        </select>
+
+                        <label>Target Value</label>
+                        <input id="goalTarget" type="number" min="1" required>
+
+                        <button type="submit">Create Goal</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Smart Goal Suggestions </h3>
+                    <div id="goalSuggestions"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Your Goals</h3>
+                    <div id="goalList"></div>
+                </div>
+            </section>
+
+            <!-- PROGRESS AND BADGES -->
+
+            <section id="progress" class="section">
+                <h1>Progress & Achievements </h1>
+
+                <div class="grid">
+                    <div class="card">
+                        <p class="muted">Total Activities</p>
+                        <div class="metric" id="totalActivities">0</div>
+                    </div>
+                    <div class="card">
+                        <p class="muted">Total Calories Burned</p>
+                        <div class="metric" id="totalBurned">0</div>
+                    </div>
+                    <div class="card">
+                        <p class="muted">Completed Goals</p>
+                        <div class="metric" id="completedGoals">0</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Workout Minutes — Last 7 Days</h3>
+                    <p class="muted">Daily workout duration from your recorded activities.</p>
+                    <div id="workoutMinutesChart" class="chart-grid" aria-label="Workout minutes chart"></div>
+                    <p class="chart-legend">Bars show the total workout minutes recorded for each day.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Calories Burned — Last 7 Days</h3>
+                    <p class="muted">Compare your daily calories burned based on logged workouts.</p>
+                    <div id="caloriesBurnedChart" class="chart-grid" aria-label="Calories burned chart"></div>
+                    <p class="chart-legend">These are user-entered/demo estimates, not medical measurements.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Calories Consumed — Last 7 Days</h3>
+                    <p class="muted">Daily calories from your food log. Values are based on entries you record.</p>
+                    <div id="caloriesConsumedChart" class="chart-grid" aria-label="Calories consumed chart"></div>
+                    <p class="chart-legend">Use this alongside balanced meals and your personal needs.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Weekly Report</h3>
+                    <p id="weeklyReport"></p>
+                    <div class="action-group"><button onclick="downloadReport()">Download TXT Report</button><button class="secondary" onclick="downloadReportCSV()">Export CSV</button></div>
+                </div>
+
+                <div class="card">
+                    <h3>Achievement Badges </h3>
+                    <div id="badges"></div>
+                </div>
+            </section>
+
+            <!-- PROFILE -->
+
+            <section id="profile" class="section">
+                <h1>My Profile </h1>
+
+                <div class="card">
+                    <h3>Personal Information</h3>
+
+                    <label>Full Name</label>
+                    <input id="profileName">
+
+                    <label>Email Address</label>
+                    <input id="profileEmail" disabled>
+
+                    <button onclick="saveProfile()">Save Profile</button>
+                </div>
+
+                <div class="card">
+                    <h3>Account Security</h3>
+                    <p class="muted">Update your password for this demo account. Use a unique password and do not share it.</p>
+                    <div class="security-note">Demo limitation: this project stores account data in this browser's localStorage. It is suitable for a classroom prototype, not production authentication or sensitive personal data.</div>
+                    <form id="passwordForm" onsubmit="updatePassword(event)">
+                        <label for="currentPassword">Current password</label>
+                        <input id="currentPassword" type="password" autocomplete="current-password" required>
+                        <label for="newPassword">New password</label>
+                        <input id="newPassword" type="password" minlength="8" autocomplete="new-password" oninput="showPasswordStrength()" required>
+                        <p id="passwordStrength" class="password-strength">Use at least 8 characters, including letters and numbers.</p>
+                        <label for="confirmPassword">Confirm new password</label>
+                        <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
+                        <button type="submit">Update Password</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ADMIN PANEL -->
+
+            <section id="admin" class="section">
+                <div class="admin-heading">
+                    <div>
+                        <p class="eyebrow">FITTRACK PRO / ADMINISTRATION</p>
+                        <h1>Admin Dashboard</h1>
+                        <p class="muted">Manage accounts, review fitness activity, and export reports.</p>
+                    </div>
+                    <button onclick="exportUsersCSV()">Export Users CSV</button>
+                </div>
+
+                <div class="grid admin-metrics">
+                    <div class="card admin-stat"><p class="muted">Registered Users</p><div class="metric" id="adminUsers">0</div><p class="stat-note">All member accounts</p></div>
+                    <div class="card admin-stat"><p class="muted">Active Accounts</p><div class="metric" id="adminActive">0</div><p class="stat-note">Currently enabled</p></div>
+                    <div class="card admin-stat"><p class="muted">New This Month</p><div class="metric" id="adminNew">0</div><p class="stat-note">Recent registrations</p></div>
+                    <div class="card admin-stat"><p class="muted">Activities Logged</p><div class="metric" id="adminActivities">0</div><p class="stat-note">Across all users</p></div>
+                </div>
+
+                <div class="card">
+                    <div class="admin-card-heading"><div><h3>Administrator Fitness Records</h3><p class="muted">Sample workout, nutrition and hydration records for the admin account, displayed separately from member records.</p></div></div>
+                    <div class="grid">
+                        <div class="detail-item"><span>Activities logged</span><strong id="adminOwnActivities">0</strong></div>
+                        <div class="detail-item"><span>Workout minutes</span><strong id="adminOwnMinutes">0</strong></div>
+                        <div class="detail-item"><span>Calories burned</span><strong id="adminOwnBurned">0 kcal</strong></div>
+                        <div class="detail-item"><span>Food calories</span><strong id="adminOwnFood">0 kcal</strong></div>
+                    </div>
+                    <div id="adminOwnActivityRecords"></div>
+                </div>
+
+                <div class="card">
+                    <div class="admin-card-heading">
+                        <div><h3>User Management</h3><p class="muted">Search, filter, inspect, and manage registered members.</p></div>
+                        <span id="adminResultCount" class="result-count">0 users</span>
+                    </div>
+                    <div class="admin-filters">
+                        <div><label for="userSearch">Search</label><input id="userSearch" placeholder="Search name or email" oninput="renderAdmin()"></div>
+                        <div><label for="userStatusFilter">Account status</label><select id="userStatusFilter" onchange="renderAdmin()"><option value="all">All statuses</option><option value="active">Active</option><option value="inactive">Suspended</option></select></div>
+                        <div><label for="userSort">Sort by</label><select id="userSort" onchange="renderAdmin()"><option value="name">Name (A–Z)</option><option value="newest">Newest registered</option><option value="oldest">Oldest registered</option><option value="activities">Most activities</option></select></div>
+                    </div>
+                    <div class="table-wrap" id="adminUserList"></div>
+                </div>
+
+                <div class="card">
+                    <div class="admin-card-heading"><div><h3>Fitness Activity Overview</h3><p class="muted">Activity entries recorded by members.</p></div></div>
+                    <div id="adminActivityOverview" class="activity-overview"></div>
+                </div>
+
+                <div class="card">
+                    <div class="admin-card-heading"><div><h3>Recent Admin Activity</h3><p class="muted">A local log of account-management actions in this demo.</p></div><button class="secondary small-btn" onclick="clearAdminLog()">Clear Log</button></div>
+                    <div id="adminActivityLog" class="admin-log"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<div id="userDetailsModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="userDetailsTitle" onclick="if(event.target === this) closeUserDetails()">
+    <div class="modal-card">
+        <div class="modal-heading"><h2 id="userDetailsTitle">Member Details</h2><button class="secondary small-btn" onclick="closeUserDetails()">Close</button></div>
+        <div id="userDetailsContent"></div>
+    </div>
+</div>
+
+<script>
+// FITTRACK PRO DEMO
+// This version stores data in the browser's localStorage.
+// Do not use it as a secure production authentication system.
+
+const KEY = "fittrack_users_v1";
+const SESSION_KEY = "fittrack_session_v1";
+const WATER_GOAL = 2000;
+
+let currentUser = null;
+
+function readUsers() {
+    try {
+        const users = JSON.parse(localStorage.getItem(KEY) || "[]");
+        return Array.isArray(users) ? users : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveUsers(users) {
+    localStorage.setItem(KEY, JSON.stringify(users));
+}
+
+function today() {
+    const d = new Date();
+    return d.getFullYear() + "-" +
+        String(d.getMonth() + 1).padStart(2, "0") + "-" +
+        String(d.getDate()).padStart(2, "0");
+}
+
+function makeId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function ensureData(user) {
+    user.activities ||= [];
+    user.foods ||= [];
+    user.goals ||= [];
+    user.waterRecords ||= {};
+    user.adminSuggestions ||= [];
+    user.profileName ||= user.name;
+    user.active = user.active !== false;
+}
+
+function getCurrentUser() {
+    return readUsers().find(u => u.id === currentUser?.id);
+}
+
+function updateCurrentUser(changes) {
+    const users = readUsers();
+    const index = users.findIndex(u => u.id === currentUser.id);
+
+    if (index === -1) return;
+
+    Object.assign(users[index], changes);
+    ensureData(users[index]);
+    saveUsers(users);
+    currentUser = users[index];
+}
+
+function showLogin() {
+    document.getElementById("loginForm").classList.remove("hidden");
+    document.getElementById("registerForm").classList.add("hidden");
+    document.getElementById("authMessage").textContent = "";
+}
+
+function showRegister() {
+    document.getElementById("loginForm").classList.add("hidden");
+    document.getElementById("registerForm").classList.remove("hidden");
+    document.getElementById("authMessage").textContent = "";
+}
+
+function register() {
+    const name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
+    const password = document.getElementById("regPassword").value;
+    const message = document.getElementById("authMessage");
+
+    if (!name || !email || password.length < 6) {
+        message.textContent = "Enter all details and use a password with at least 6 characters.";
+        return;
+    }
+
+    const users = readUsers();
+
+    if (users.some(u => u.email === email)) {
+        message.textContent = "An account with this email already exists.";
+        return;
+    }
+
+    const user = {
+        id: makeId(),
+        name,
+        email,
+        password,
+        role: "user",
+        active: true,
+        activities: [],
+        foods: [],
+        goals: [],
+        waterRecords: {},
+        adminSuggestions: [],
+        createdAt: new Date().toISOString()
+    };
+
+    ensureData(user);
+    users.push(user);
+    saveUsers(users);
+
+    showLogin();
+    message.style.color = "#087443";
+    message.textContent = "Account created successfully! Please log in.";
+    document.getElementById("loginEmail").value = email;
+}
+
+function login() {
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+    const message = document.getElementById("authMessage");
+
+    const user = readUsers().find(u =>
+        u.email === email && u.password === password
+    );
+
+    if (!user) {
+        message.textContent = "Incorrect email or password.";
+        return;
+    }
+
+    if (!user.active) {
+        message.textContent = "This account has been deactivated by the administrator.";
+        return;
+    }
+
+    ensureData(user);
+    currentUser = user;
+    localStorage.setItem(SESSION_KEY, user.id);
+
+    openApp();
+}
+
+function logout() {
+    currentUser = null;
+    localStorage.removeItem(SESSION_KEY);
+    document.getElementById("appPage").classList.add("hidden");
+    document.getElementById("authPage").classList.remove("hidden");
+    showLogin();
+}
+
+function openApp() {
+    document.getElementById("authPage").classList.add("hidden");
+    document.getElementById("appPage").classList.remove("hidden");
+
+    document.getElementById("welcomeUser").textContent =
+        "Hi, " + currentUser.profileName;
+
+    document.getElementById("adminNav").classList.toggle(
+        "hidden", currentUser.role !== "admin"
+    );
+
+    document.querySelectorAll(".nav-btn[data-section]").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    document.querySelector('[data-section="dashboard"]').classList.add("active");
+
+    showSection("dashboard");
+    renderAll();
+}
+
+document.querySelectorAll(".nav-btn[data-section]").forEach(button => {
+    button.addEventListener("click", () => {
+        showSection(button.dataset.section);
+    });
+});
+
+function showSection(sectionId) {
+    if (sectionId === "admin" && currentUser?.role !== "admin") {
+        alert("Only the administrator can access this section.");
+        return;
+    }
+
+    document.querySelectorAll(".section").forEach(section => {
+        section.classList.remove("active");
+    });
+
+    document.getElementById(sectionId).classList.add("active");
+
+    document.querySelectorAll(".nav-btn[data-section]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.section === sectionId);
+    });
+
+    renderAll();
+}
+
+function currentActivities() {
+    return currentUser.activities.filter(a => a.date === today());
+}
+
+function currentFoods() {
+    return currentUser.foods.filter(f => f.date === today());
+}
+
+function currentWater() {
+    return Number(currentUser.waterRecords[today()] || 0);
+}
+
+function addWater(amount) {
+    const records = {...currentUser.waterRecords};
+    records[today()] = currentWater() + amount;
+    updateCurrentUser({waterRecords: records});
+    renderAll();
+}
+
+function resetWater() {
+    if (!confirm("Reset today's water intake?")) return;
+
+    const records = {...currentUser.waterRecords};
+    records[today()] = 0;
+    updateCurrentUser({waterRecords: records});
+    renderAll();
+}
+
+document.getElementById("activityForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const activities = [...currentUser.activities];
+
+    activities.push({
+        id: makeId(),
+        type: document.getElementById("activityType").value,
+        duration: Number(document.getElementById("activityDuration").value),
+        burned: Number(document.getElementById("activityBurned").value),
+        date: today()
+    });
+
+    updateCurrentUser({activities});
+    event.target.reset();
+    renderAll();
+    alert("Activity saved successfully!");
+});
+
+document.getElementById("foodForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const foods = [...currentUser.foods];
+
+    foods.push({
+        id: makeId(),
+        name: document.getElementById("foodName").value.trim(),
+        calories: Number(document.getElementById("foodCalories").value),
+        date: today()
+    });
+
+    updateCurrentUser({foods});
+    event.target.reset();
+    renderAll();
+    alert("Food entry saved successfully!");
+});
+
+document.getElementById("goalForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const goals = [...currentUser.goals];
+
+    goals.push({
+        id: makeId(),
+        name: document.getElementById("goalName").value.trim(),
+        category: document.getElementById("goalCategory").value,
+        target: Number(document.getElementById("goalTarget").value),
+        completed: false
+    });
+
+    updateCurrentUser({goals});
+    event.target.reset();
+    renderAll();
+    alert("Goal created successfully!");
+});
+
+function removeRecord(type, id) {
+    if (!confirm("Delete this record?")) return;
+
+    const items = currentUser[type].filter(item => item.id !== id);
+    updateCurrentUser({[type]: items});
+    renderAll();
+}
+
+function toggleGoal(id) {
+    const goals = currentUser.goals.map(g =>
+        g.id === id ? {...g, completed: !g.completed} : g
+    );
+
+    updateCurrentUser({goals});
+    renderAll();
+}
+
+function renderDashboard() {
+    const activities = currentActivities();
+    const foods = currentFoods();
+    const burned = activities.reduce((sum, a) => sum + a.burned, 0);
+    const consumed = foods.reduce((sum, f) => sum + f.calories, 0);
+    const water = currentWater();
+
+    document.getElementById("dashActivities").textContent = activities.length;
+    document.getElementById("dashCalories").textContent = consumed;
+    document.getElementById("dashBurned").textContent = burned;
+    document.getElementById("dashWater").textContent = water;
+
+    document.getElementById("waterSummary").textContent =
+        water + " / " + WATER_GOAL + " ml";
+
+    const percent = Math.min(100, water / WATER_GOAL * 100);
+    document.getElementById("waterProgress").style.width = percent + "%";
+    document.getElementById("waterProgress2").style.width = percent + "%";
+    document.getElementById("waterAmount").textContent = water;
+
+    document.getElementById("waterMessage").textContent =
+        water >= WATER_GOAL
+        ? "Daily demo target reached! "
+        : "Keep tracking your water intake.";
+
+    const tips = [
+        "Try a short walk after long periods of sitting.",
+        "Record your meals to understand your daily calorie intake.",
+        "Consistency matters more than one intense workout.",
+        "Drink water regularly throughout your day.",
+        "Choose realistic goals and track your progress."
+    ];
+
+    document.getElementById("dailyTip").textContent =
+        tips[new Date().getDate() % tips.length];
+
+    // Build practical suggestions from the signed-in member's own logged data.
+    const suggestions = [];
+    const goalWater = WATER_GOAL;
+    const activeGoalsForSuggestions = (currentUser.goals || []).filter(g => !g.completed);
+    const completedGoals = (currentUser.goals || []).filter(g => g.completed);
+
+    if (activities.length === 0) {
+        suggestions.push({title: "Add some movement", text: "No activity is recorded for today. If it suits your routine, try a comfortable 10–15 minute walk and log it."});
+    } else if (activities.length < 3) {
+        suggestions.push({title: "Keep building consistency", text: `You logged ${activities.length} ${activities.length === 1 ? "activity" : "activities"} today. Consider adding another short activity only if you feel comfortable.`});
+    } else {
+        suggestions.push({title: "Great tracking today", text: `You have logged ${activities.length} activities. Remember to balance exercise with rest and recovery.`});
+    }
+
+    if (water < goalWater) {
+        const remainingWater = goalWater - water;
+        suggestions.push({title: "Hydration reminder", text: `Your tracker shows ${water} ml of water today. You are ${remainingWater} ml below the app's ${goalWater} ml demo target; sip water regularly through the day.`});
+    } else {
+        suggestions.push({title: "Hydration progress", text: `You have reached the app's ${goalWater} ml demo water target. Keep drinking according to your needs and daily conditions.`});
+    }
+
+    if (foods.length === 0) {
+        suggestions.push({title: "Track your meals", text: "Add the meals and snacks you eat to get a clearer picture of your logged daily calorie intake."});
+    } else {
+        suggestions.push({title: "Review your nutrition log", text: `You have logged ${consumed} kcal from ${foods.length} food ${foods.length === 1 ? "entry" : "entries"} today. Aim for balanced meals and include a variety of foods.`});
+    }
+
+    if (activeGoalsForSuggestions.length > 0) {
+        suggestions.push({title: "Take one step toward a goal", text: `You have ${activeGoalsForSuggestions.length} active ${activeGoalsForSuggestions.length === 1 ? "goal" : "goals"}. Choose one small, realistic action today to make progress.`});
+    } else if (completedGoals.length > 0) {
+        suggestions.push({title: "Set your next milestone", text: "You have completed your current goals. Consider setting a new, realistic goal that matches your routine."});
+    } else {
+        suggestions.push({title: "Create a fitness goal", text: "Set a short-term goal, such as recording a few activities this week, then review your progress."});
+    }
+
+    const suggestionHost = document.getElementById("personalizedSuggestions");
+    if (suggestionHost) {
+        suggestionHost.innerHTML = suggestions.map(item => `
+            <div class="notice" style="margin:10px 0">
+                <strong>${escapeHTML(item.title)}</strong>
+                <p style="margin:6px 0 0">${escapeHTML(item.text)}</p>
+            </div>`).join("");
+    }
+
+    const adminSuggestionsHost = document.getElementById("adminSuggestionsForUser");
+    if (adminSuggestionsHost) {
+        const sentSuggestions = (currentUser.adminSuggestions || []).slice().reverse();
+        adminSuggestionsHost.innerHTML = sentSuggestions.length
+            ? sentSuggestions.map(item => `<div class="recommendation-item"><strong>${escapeHTML(item.title || "Fitness recommendation")}</strong><p>${escapeHTML(item.message || "")}</p><small>From administrator · ${escapeHTML(item.at ? new Date(item.at).toLocaleString() : "Demo recommendation")}</small></div>`).join("")
+            : "<p class='muted'>No administrator suggestions yet. Your admin can review your records and send personalized guidance here.</p>";
+    }
+
+    const activeGoals = currentUser.goals.filter(g => !g.completed);
+
+    document.getElementById("dashboardGoals").innerHTML =
+        activeGoals.length
+        ? activeGoals.map(g => `<p> ${escapeHTML(g.name)}</p>`).join("")
+        : "<p class='muted'>Create a goal to see it here.</p>";
+}
+
+function renderActivities() {
+    const list = currentUser.activities.slice().reverse();
+
+    document.getElementById("activityHistory").innerHTML = list.length
+        ? `<table>
+            <tr><th>Activity</th><th>Minutes</th><th>Calories</th><th>Date</th><th>Action</th></tr>
+            ${list.map(a => `
+                <tr>
+                    <td>${escapeHTML(a.type)}</td>
+                    <td>${a.duration}</td>
+                    <td>${a.burned}</td>
+                    <td>${escapeHTML(a.date)}</td>
+                    <td><button class="small-btn danger" onclick="removeRecord('activities','${a.id}')">Delete</button></td>
+                </tr>`).join("")}
+          </table>`
+        : "<p class='muted'>No activities recorded yet.</p>";
+}
+
+function renderFoods() {
+    const list = currentFoods();
+    const total = list.reduce((sum, f) => sum + f.calories, 0);
+
+    document.getElementById("foodTotal").textContent =
+        "Today's total: " + total + " kcal";
+
+    document.getElementById("foodHistory").innerHTML = list.length
+        ? `<table>
+            <tr><th>Food</th><th>Calories</th><th>Action</th></tr>
+            ${list.map(f => `
+                <tr>
+                    <td>${escapeHTML(f.name)}</td>
+                    <td>${f.calories} kcal</td>
+                    <td><button class="small-btn danger" onclick="removeRecord('foods','${f.id}')">Delete</button></td>
+                </tr>`).join("")}
+          </table>`
+        : "<p class='muted'>No food entries for today.</p>";
+}
+
+function renderGoals() {
+    const goals = currentUser.goals;
+
+    document.getElementById("goalList").innerHTML = goals.length
+        ? goals.map(g => `
+            <div class="notice">
+                <strong>${escapeHTML(g.name)}</strong>
+                <p class="muted">${escapeHTML(g.category)} · Target: ${g.target}</p>
+                <p>${g.completed ? " Completed" : "⏳ In progress"}</p>
+                <button class="small-btn" onclick="toggleGoal('${g.id}')">
+                    ${g.completed ? "Mark Incomplete" : "Complete Goal"}
+                </button>
+                <button class="small-btn danger" onclick="removeRecord('goals','${g.id}')">Delete</button>
+            </div>`).join("")
+        : "<p class='muted'>No goals yet. Create your first goal above.</p>";
+
+    const suggestions = [];
+
+    if (currentActivities().length === 0) {
+        suggestions.push("Record a short walk or workout today.");
+    }
+
+    if (currentWater() < WATER_GOAL) {
+        suggestions.push("Keep track of your water intake throughout the day.");
+    }
+
+    if (currentUser.goals.length === 0) {
+        suggestions.push("Set a realistic weekly activity goal.");
+    }
+
+    suggestions.push("Review your weekly report and adjust your goals.");
+
+    document.getElementById("goalSuggestions").innerHTML =
+        suggestions.map(s => `<div class="notice"> ${escapeHTML(s)}</div>`).join("");
+}
+
+function getLastSevenDays() {
+    const dates = [];
+
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+
+        dates.push(
+            d.getFullYear() + "-" +
+            String(d.getMonth() + 1).padStart(2, "0") + "-" +
+            String(d.getDate()).padStart(2, "0")
+        );
+    }
+
+    return dates;
+}
+
+function renderProgress() {
+    const activities = currentUser.activities;
+    const totalBurned = activities.reduce((sum, a) => sum + a.burned, 0);
+    const completed = currentUser.goals.filter(g => g.completed).length;
+
+    document.getElementById("totalActivities").textContent = activities.length;
+    document.getElementById("totalBurned").textContent = totalBurned;
+    document.getElementById("completedGoals").textContent = completed;
+
+    const dates = getLastSevenDays();
+
+    const weeklyActivities = activities.filter(a => dates.includes(a.date));
+    const weeklyFoods = currentUser.foods.filter(f => dates.includes(f.date));
+    const weeklyBurned = weeklyActivities.reduce((sum, a) => sum + a.burned, 0);
+    const weeklyMinutes = weeklyActivities.reduce((sum, a) => sum + a.duration, 0);
+    const weeklyCalories = weeklyFoods.reduce((sum, f) => sum + f.calories, 0);
+    const weeklyWater = dates.reduce((sum, date) =>
+        sum + Number(currentUser.waterRecords[date] || 0), 0);
+
+    const renderBarChart = (hostId, valueForDay, unit) => {
+        const host = document.getElementById(hostId);
+        if (!host) return;
+        const values = dates.map(date => ({date, value: valueForDay(date)}));
+        const maxValue = Math.max(1, ...values.map(item => item.value));
+        host.innerHTML = values.map(item => {
+            const dayLabel = new Date(item.date + "T12:00:00").toLocaleDateString(undefined, {weekday:"short"});
+            const height = item.value === 0 ? 3 : Math.max(6, item.value / maxValue * 100);
+            return `<div class="chart-day"><span class="chart-value">${item.value}</span><div class="chart-bar-track" title="${escapeHTML(item.date)}: ${item.value} ${unit}"><div class="chart-bar" style="height:${height}%"></div></div><span class="chart-label">${dayLabel}</span></div>`;
+        }).join("");
+    };
+    renderBarChart("workoutMinutesChart", date => weeklyActivities.filter(a => a.date === date).reduce((sum, a) => sum + Number(a.duration || 0), 0), "minutes");
+    renderBarChart("caloriesBurnedChart", date => weeklyActivities.filter(a => a.date === date).reduce((sum, a) => sum + Number(a.burned || 0), 0), "kcal");
+    renderBarChart("caloriesConsumedChart", date => weeklyFoods.filter(f => f.date === date).reduce((sum, f) => sum + Number(f.calories || 0), 0), "kcal");
+
+    document.getElementById("weeklyReport").innerHTML =
+        `Period: ${dates[0]} to ${dates[6]}<br>
+         Activities recorded: <strong>${weeklyActivities.length}</strong><br>
+         Workout duration: <strong>${weeklyMinutes} minutes</strong><br>
+         Calories burned: <strong>${weeklyBurned} kcal</strong><br>
+         Food calories logged: <strong>${weeklyCalories} kcal</strong><br>
+         Water recorded: <strong>${weeklyWater} ml</strong>`;
+
+    const badges = [];
+
+    if (activities.length >= 1) badges.push("First Activity");
+    if (activities.length >= 5) badges.push("Active Starter");
+    if (activities.length >= 10) badges.push("Fitness Champion");
+    if (currentWater() >= WATER_GOAL) badges.push("Hydration Hero");
+    if (completed >= 1) badges.push("Goal Achiever");
+    if (completed >= 3) badges.push("Goal Master");
+
+    document.getElementById("badges").innerHTML = badges.length
+        ? badges.map(b => `<span class="badge">${b}</span>`).join("")
+        : "<p class='muted'>Record activities, drink water and complete goals to unlock badges.</p>";
+}
+
+function renderProfile() {
+    document.getElementById("profileName").value = currentUser.profileName;
+    document.getElementById("profileEmail").value = currentUser.email;
+}
+
+function saveProfile() {
+    const name = document.getElementById("profileName").value.trim();
+
+    if (!name) {
+        alert("Please enter your name.");
+        return;
+    }
+
+    updateCurrentUser({profileName: name});
+    document.getElementById("welcomeUser").textContent = "Hi, " + name;
+    alert("Profile updated!");
+    renderAll();
+}
+
+function showPasswordStrength() {
+    const value = document.getElementById("newPassword")?.value || "";
+    const score = [value.length >= 8, /[A-Za-z]/.test(value), /\d/.test(value), /[^A-Za-z0-9]/.test(value)].filter(Boolean).length;
+    const labels = ["Use at least 8 characters, including letters and numbers.", "Weak password", "Fair password", "Good password", "Strong password"];
+    const host = document.getElementById("passwordStrength");
+    if (host) host.textContent = labels[score];
+}
+
+function updatePassword(event) {
+    event.preventDefault();
+    if (!currentUser) return;
+    const oldPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    if (oldPassword !== currentUser.password) return alert("Your current password is incorrect.");
+    if (newPassword.length < 8 || !/[A-Za-z]/.test(newPassword) || !/\d/.test(newPassword)) return alert("Choose at least 8 characters and include both letters and numbers.");
+    if (newPassword !== confirmPassword) return alert("The new passwords do not match.");
+    const users = readUsers();
+    const index = users.findIndex(u => u.id === currentUser.id);
+    if (index < 0) return alert("Account not found. Please sign in again.");
+    users[index].password = newPassword;
+    saveUsers(users);
+    currentUser = users[index];
+    document.getElementById("passwordForm").reset();
+    showPasswordStrength();
+    alert("Password updated for this local demo account.");
+}
+
+function downloadReportCSV() {
+    const dates = getLastSevenDays();
+    const rows = [["Date","Activities","Workout minutes","Calories burned","Calories consumed","Water ml"]];
+    dates.forEach(date => {
+        const activities = currentUser.activities.filter(a => a.date === date);
+        const foods = currentUser.foods.filter(f => f.date === date);
+        rows.push([date, activities.length, activities.reduce((s,a)=>s+Number(a.duration||0),0), activities.reduce((s,a)=>s+Number(a.burned||0),0), foods.reduce((s,f)=>s+Number(f.calories||0),0), Number(currentUser.waterRecords[date]||0)]);
+    });
+    const csv = rows.map(row => row.map(value => `"${String(value).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+    const url = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8;"}));
+    const link = document.createElement("a"); link.href = url; link.download = "FitTrack-Weekly-Report.csv"; link.click(); URL.revokeObjectURL(url);
+}
+
+function downloadReport() {
+    const dates = getLastSevenDays();
+    const activities = currentUser.activities.filter(a => dates.includes(a.date));
+    const foods = currentUser.foods.filter(f => dates.includes(f.date));
+
+    const report = [
+        "FITTRACK PRO - WEEKLY REPORT",
+        "User: " + currentUser.profileName,
+        "Period: " + dates[0] + " to " + dates[6],
+        "Activities: " + activities.length,
+        "Workout minutes: " + activities.reduce((s, a) => s + a.duration, 0),
+        "Calories burned: " + activities.reduce((s, a) => s + a.burned, 0),
+        "Food calories logged: " + foods.reduce((s, f) => s + f.calories, 0),
+        "Water recorded: " + dates.reduce((s, d) =>
+            s + Number(currentUser.waterRecords[d] || 0), 0) + " ml"
+    ].join("\n");
+
+    const blob = new Blob([report], {type: "text/plain"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "FitTrack-Weekly-Report.txt";
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
+
+const ADMIN_LOG_KEY = "fittrack_admin_log_v1";
+
+function readAdminLog() {
+    try {
+        const log = JSON.parse(localStorage.getItem(ADMIN_LOG_KEY) || "[]");
+        return Array.isArray(log) ? log : [];
+    } catch {
+        return [];
+    }
+}
+
+function logAdminAction(action) {
+    const log = readAdminLog();
+    log.unshift({ action, by: currentUser?.profileName || "Administrator", at: new Date().toISOString() });
+    localStorage.setItem(ADMIN_LOG_KEY, JSON.stringify(log.slice(0, 50)));
+}
+
+function renderAdmin() {
+    if (currentUser?.role !== "admin") return;
+
+    const users = readUsers().filter(u => u.role !== "admin");
+    const searchEl = document.getElementById("userSearch");
+    const statusEl = document.getElementById("userStatusFilter");
+    const sortEl = document.getElementById("userSort");
+    const search = (searchEl?.value || "").trim().toLowerCase();
+    const status = statusEl?.value || "all";
+    const sort = sortEl?.value || "name";
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    document.getElementById("adminUsers").textContent = users.length;
+    document.getElementById("adminActive").textContent = users.filter(u => u.active !== false).length;
+    document.getElementById("adminNew").textContent = users.filter(u => u.createdAt && new Date(u.createdAt) >= startOfMonth).length;
+    document.getElementById("adminActivities").textContent = users.reduce((sum, u) => sum + (u.activities || []).length, 0);
+
+    let filtered = users.filter(u => {
+        const name = String(u.profileName || u.name || "").toLowerCase();
+        const email = String(u.email || "").toLowerCase();
+        const matchesSearch = name.includes(search) || email.includes(search);
+        const matchesStatus = status === "all" || (status === "active" ? u.active !== false : u.active === false);
+        return matchesSearch && matchesStatus;
+    });
+
+    filtered.sort((a, b) => {
+        if (sort === "newest") return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        if (sort === "oldest") return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
+        if (sort === "activities") return (b.activities || []).length - (a.activities || []).length;
+        return String(a.profileName || a.name || "").localeCompare(String(b.profileName || b.name || ""));
+    });
+
+    document.getElementById("adminResultCount").textContent = `${filtered.length} of ${users.length} users`;
+    document.getElementById("adminUserList").innerHTML = filtered.length
+        ? `<table><thead><tr><th>Member</th><th>Email</th><th>Activities</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+            ${filtered.map(u => `
+                <tr>
+                    <td><strong>${escapeHTML(u.profileName || u.name || "Unnamed")}</strong></td>
+                    <td>${escapeHTML(u.email)}</td>
+                    <td>${(u.activities || []).length}</td>
+                    <td>${u.createdAt && !Number.isNaN(new Date(u.createdAt).getTime()) ? escapeHTML(new Date(u.createdAt).toLocaleDateString()) : "—"}</td>
+                    <td><span class="status-pill ${u.active === false ? "status-inactive" : "status-active"}">${u.active === false ? "Suspended" : "Active"}</span></td>
+                    <td><div class="action-group">
+                        <button class="small-btn secondary" onclick="viewUserDetails('${escapeHTML(u.id)}')">View</button>
+                        <button class="small-btn ${u.active === false ? "" : "secondary"}" onclick="toggleUser('${escapeHTML(u.id)}')">${u.active === false ? "Reactivate" : "Suspend"}</button>
+                        <button class="small-btn danger" onclick="deleteUser('${escapeHTML(u.id)}')">Delete</button>
+                    </div></td>
+                </tr>`).join("")}
+          </tbody></table>`
+        : "<p class='muted' style='padding:18px 0'>No users match these search and filter settings.</p>";
+
+    renderAdminActivityOverview(users);
+    renderAdminLog();
+}
+
+function renderAdminActivityOverview(users) {
+    const counts = {};
+    users.forEach(user => (user.activities || []).forEach(activity => {
+        const type = String(activity.type || activity.activity || "Other");
+        counts[type] = (counts[type] || 0) + 1;
+    }));
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const max = Math.max(1, ...entries.map(entry => entry[1]));
+    document.getElementById("adminActivityOverview").innerHTML = entries.length
+        ? entries.map(([type, count]) => `<div class="activity-bar-row"><span>${escapeHTML(type)}</span><div class="activity-bar-track"><div class="activity-bar-fill" style="width:${Math.round(count / max * 100)}%"></div></div><strong>${count}</strong></div>`).join("")
+        : "<p class='muted'>No fitness activities have been recorded yet.</p>";
+}
+
+function renderAdminLog() {
+    const log = readAdminLog();
+    const target = document.getElementById("adminActivityLog");
+    if (!target) return;
+    target.innerHTML = log.length
+        ? log.slice(0, 10).map(item => `<div class="log-entry"><span>${escapeHTML(item.action)} <span class="muted">by ${escapeHTML(item.by || "Administrator")}</span></span><span class="log-time">${new Date(item.at).toLocaleString()}</span></div>`).join("")
+        : "<p class='muted'>No admin actions recorded yet. Account changes will appear here.</p>";
+}
+
+function viewUserDetails(id) {
+    if (currentUser?.role !== "admin") return;
+    const user = readUsers().find(u => u.id === id && u.role !== "admin");
+    if (!user) return;
+    const activities = user.activities || [];
+    const foods = user.foods || [];
+    const goals = user.goals || [];
+    const workoutMinutes = activities.reduce((sum, a) => sum + Number(a.duration || 0), 0);
+    const caloriesBurned = activities.reduce((sum, a) => sum + Number(a.burned || a.caloriesBurned || 0), 0);
+    const caloriesEaten = foods.reduce((sum, f) => sum + Number(f.calories || 0), 0);
+    const waterTotal = Object.values(user.waterRecords || {}).reduce((sum, value) => sum + Number(value || 0), 0);
+    document.getElementById("userDetailsContent").innerHTML = `
+        <p class="muted">${escapeHTML(user.email)} · <span class="status-pill ${user.active === false ? "status-inactive" : "status-active"}">${user.active === false ? "Suspended" : "Active"}</span></p>
+        <div class="detail-grid">
+            <div class="detail-item"><span>Activities logged</span><strong>${activities.length}</strong></div>
+            <div class="detail-item"><span>Workout minutes</span><strong>${workoutMinutes}</strong></div>
+            <div class="detail-item"><span>Calories burned</span><strong>${caloriesBurned}</strong></div>
+            <div class="detail-item"><span>Food entries</span><strong>${foods.length}</strong></div>
+            <div class="detail-item"><span>Calories consumed</span><strong>${caloriesEaten}</strong></div>
+            <div class="detail-item"><span>Goals recorded</span><strong>${goals.length}</strong></div>
+            <div class="detail-item"><span>Water recorded (all dates)</span><strong>${waterTotal} ml</strong></div>
+            <div class="detail-item"><span>Registration date</span><strong style="font-size:16px">${user.createdAt && !Number.isNaN(new Date(user.createdAt).getTime()) ? escapeHTML(new Date(user.createdAt).toLocaleDateString()) : "Not available"}</strong></div>
+        </div>
+        <h3>Recent Workouts</h3>
+        ${(activities.length ? activities.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).slice(0,8).map(a=>`<div class="log-entry"><span><strong>${escapeHTML(a.type||"Workout")}</strong> · ${Number(a.duration||0)} min · ${Number(a.burned||0)} kcal</span><span class="log-time">${escapeHTML(a.date||"Date not set")}</span></div>`).join("") : "<p class='muted'>No workout records yet.</p>")}
+        <h3 style="margin-top:18px">Admin Suggestions Sent</h3>
+        <div>${(user.adminSuggestions || []).length ? user.adminSuggestions.slice().reverse().map(item=>`<div class="recommendation-item"><strong>${escapeHTML(item.title||"Fitness recommendation")}</strong><p>${escapeHTML(item.message||"")}</p><small>${escapeHTML(item.at ? new Date(item.at).toLocaleString() : "")}</small></div>`).join("") : "<p class='muted'>No suggestions sent yet.</p>"}</div>
+        <form class="admin-suggestion-form" onsubmit="sendAdminSuggestion(event, '${escapeHTML(user.id)}')">
+            <h3>Send a Personalized Suggestion</h3>
+            <p class="muted">Use the member's workout, calorie, nutrition and goal records to write practical feedback.</p>
+            <label for="suggestionTitle">Suggestion title</label>
+            <input id="suggestionTitle" name="suggestionTitle" placeholder="e.g. Build a steady walking routine" required>
+            <label for="suggestionMessage">Message to member</label>
+            <textarea id="suggestionMessage" name="suggestionMessage" placeholder="Write a supportive suggestion based on this member's records..." required></textarea>
+            <button type="submit">Send Suggestion to User</button>
+        </form>`;
+    document.getElementById("userDetailsModal").classList.remove("hidden");
+}
+
+function sendAdminSuggestion(event, id) {
+    event.preventDefault();
+    if (currentUser?.role !== "admin") return;
+    const title = document.getElementById("suggestionTitle").value.trim();
+    const message = document.getElementById("suggestionMessage").value.trim();
+    if (!title || !message) return;
+    const users = readUsers();
+    const index = users.findIndex(u => u.id === id && u.role !== "admin");
+    if (index < 0) return;
+    users[index].adminSuggestions ||= [];
+    users[index].adminSuggestions.push({id: makeId(), title, message, at: new Date().toISOString(), by: currentUser.email});
+    saveUsers(users);
+    logAdminAction(`Sent a fitness suggestion to ${users[index].email}`);
+    viewUserDetails(id);
+    renderAdmin();
+}
+
+function closeUserDetails() {
+    document.getElementById("userDetailsModal").classList.add("hidden");
+}
+
+function toggleUser(id) {
+    if (currentUser?.role !== "admin") return;
+    const target = readUsers().find(u => u.id === id && u.role !== "admin");
+    if (!target) return;
+    const nextActive = target.active === false;
+    const users = readUsers().map(u => u.id === id ? {...u, active: nextActive} : u);
+    saveUsers(users);
+    logAdminAction(`${nextActive ? "Reactivated" : "Suspended"} account: ${target.email}`);
+    renderAdmin();
+}
+
+function deleteUser(id) {
+    if (currentUser?.role !== "admin") return;
+    const target = readUsers().find(u => u.id === id && u.role !== "admin");
+    if (!target) return;
+    if (!confirm(`Delete the account for ${target.email} and all of its demo data? This cannot be undone.`)) return;
+    saveUsers(readUsers().filter(u => u.id !== id));
+    logAdminAction(`Deleted account: ${target.email}`);
+    closeUserDetails();
+    renderAdmin();
+}
+
+function exportUsersCSV() {
+    if (currentUser?.role !== "admin") return;
+    const users = readUsers().filter(u => u.role !== "admin");
+    const columns = ["Name", "Email", "Status", "Registration Date", "Activities", "Food Entries", "Goals"];
+    const rows = users.map(u => [
+        u.profileName || u.name || "", u.email || "", u.active === false ? "Suspended" : "Active",
+        u.createdAt || "", (u.activities || []).length, (u.foods || []).length, (u.goals || []).length
+    ]);
+    const csvCell = value => `"${String(value ?? "").replace(/"/g, '""')}"`;
+    const csv = [columns, ...rows].map(row => row.map(csvCell).join(",")).join("\r\n");
+    const blob = new Blob(["\uFEFF", csv], {type: "text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "FitTrack-Pro-Users.csv";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    logAdminAction(`Exported CSV report (${users.length} user accounts)`);
+    renderAdminLog();
+}
+
+function clearAdminLog() {
+    if (currentUser?.role !== "admin") return;
+    if (!confirm("Clear the local admin activity log?")) return;
+    localStorage.removeItem(ADMIN_LOG_KEY);
+    renderAdminLog();
+}
+
+function renderAll() {
+    if (!currentUser) return;
+
+    renderDashboard();
+    renderActivities();
+    renderFoods();
+    renderGoals();
+    renderProgress();
+    renderProfile();
+    renderAdmin();
+}
+
+// Create a demo administrator if one does not exist.
+function setupDemoAdmin() {
+    const users = readUsers();
+
+    let admin = users.find(u => u.email === "admin@fittrack.com");
+    if (!admin) {
+        admin = {id:"fittrack-admin", name:"Administrator", profileName:"Administrator", email:"admin@fittrack.com", password:"Admin123!", role:"admin", active:true, activities:[], foods:[], goals:[], waterRecords:{}, adminSuggestions:[], createdAt:new Date().toISOString()};
+        users.push(admin);
+    }
+    // Demo-only administrator records; seed only when the admin has no workout history.
+    if (!(admin.activities || []).length) {
+        const dateOffset = days => { const d = new Date(); d.setDate(d.getDate()-days); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+        admin.activities = [["Brisk Walking",28,130,0],["Strength Training",35,230,1],["Cycling",25,205,2],["Yoga",20,65,3],["Running",18,190,5]].map((a,i)=>({id:"admin-demo-activity-"+i,type:a[0],duration:a[1],burned:a[2],date:dateOffset(a[3])}));
+        admin.foods = [["Oats and fruit",340,0],["Rice, dal and vegetables",560,1],["Egg sandwich",390,2]].map((f,i)=>({id:"admin-demo-food-"+i,name:f[0],calories:f[1],date:dateOffset(f[2])}));
+        admin.goals = [{id:"admin-demo-goal-1",name:"Exercise four days this week",category:"Workout",target:4,completed:false},{id:"admin-demo-goal-2",name:"Log meals regularly",category:"Nutrition",target:3,completed:true}];
+        admin.waterRecords ||= {};
+        [0,1,2,3,4,5,6].forEach((days,i)=>admin.waterRecords[dateOffset(days)] = [2100,1800,2300,2000,1900,2200,2050][i]);
+    }
+    ensureData(admin);
+    saveUsers(users);
+}
+
+// Add five ready-to-demo member accounts with sample records.
+// Runs safely on every page load: existing accounts are not overwritten.
+function setupDemoMembers() {
+    const samples = [
+        { name: "Aarav Sharma", email: "aarav@fittrack.com", password: "Aarav123!", activities: [["Walking", 35, 145], ["Cycling", 25, 210], ["Running", 20, 230]], foods: [["Oats and banana", 320], ["Rice and dal", 540], ["Paneer wrap", 410]], goals: [["Walk 8000 steps daily", "Activity", 8000, false], ["Drink 2 litres of water", "Hydration", 2000, true], ["Exercise 4 days a week", "Workout", 4, false]], water: 2250 },
+        { name: "Priya Reddy", email: "priya@fittrack.com", password: "Priya123!", activities: [["Yoga", 40, 130], ["Walking", 30, 125], ["Strength Training", 35, 220]], foods: [["Idli and sambar", 360], ["Vegetable pulao", 490], ["Fruit bowl", 180]], goals: [["Practice yoga 5 days a week", "Workout", 5, true], ["Eat fruit every day", "Nutrition", 1, false], ["Walk 6000 steps daily", "Activity", 6000, false]], water: 2000 },
+        { name: "Rahul Verma", email: "rahul@fittrack.com", password: "Rahul123!", activities: [["Running", 30, 340], ["Cycling", 45, 370], ["Skipping", 15, 190]], foods: [["Egg sandwich", 390], ["Chicken and rice", 650], ["Yogurt and berries", 220]], goals: [["Run 3 km without stopping", "Workout", 3, false], ["Burn 400 calories a day", "Activity", 400, true], ["Limit sugary snacks", "Nutrition", 1, false]], water: 2600 },
+        { name: "Sneha Patel", email: "sneha@fittrack.com", password: "Sneha123!", activities: [["Dance Workout", 30, 240], ["Walking", 40, 160], ["Pilates", 25, 150]], foods: [["Poha", 280], ["Dal, rice and vegetables", 570], ["Peanut butter toast", 310]], goals: [["Complete 150 workout minutes weekly", "Workout", 150, false], ["Drink 2 litres of water", "Hydration", 2000, true], ["Log meals every day", "Nutrition", 3, false]], water: 1900 },
+        { name: "Kiran Kumar", email: "kiran@fittrack.com", password: "Kiran123!", activities: [["Brisk Walking", 50, 240], ["Badminton", 40, 330], ["Strength Training", 30, 210]], foods: [["Dosa and chutney", 420], ["Chapati and paneer", 610], ["Apple and almonds", 240]], goals: [["Play a sport twice a week", "Activity", 2, true], ["Reach 7000 steps daily", "Activity", 7000, false], ["Track daily food intake", "Nutrition", 3, false]], water: 2150 }
+    ];
+    const users = readUsers();
+    const dateOffset = days => {
+        const d = new Date();
+        d.setDate(d.getDate() - days);
+        return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    };
+    let changed = false;
+    samples.forEach((sample, index) => {
+        if (users.some(u => u.email === sample.email)) return;
+        const created = new Date();
+        created.setDate(created.getDate() - (index + 2));
+        const user = {
+            id: "fittrack-demo-" + (index + 1), name: sample.name, profileName: sample.name,
+            email: sample.email, password: sample.password, role: "user", active: true,
+            createdAt: created.toISOString(),
+            activities: sample.activities.map((a, i) => ({ id: makeId(), type: a[0], duration: a[1], burned: a[2], date: dateOffset(i) })),
+            foods: sample.foods.map((f, i) => ({ id: makeId(), name: f[0], calories: f[1], date: dateOffset(i) })),
+            goals: sample.goals.map((g, i) => ({ id: makeId(), name: g[0], category: g[1], target: g[2], completed: g[3], createdAt: dateOffset(i) })),
+            waterRecords: Object.fromEntries(Array.from({ length: 7 }, (_, day) => [dateOffset(day), Math.max(500, sample.water + (day % 3 - 1) * 250)]))
+        };
+        ensureData(user);
+        users.push(user);
+        changed = true;
+    });
+    if (changed) saveUsers(users);
+}
+
+// Add varied sample workout records to the five demo members only, once per browser storage.
+function enrichDemoMemberRecords() {
+    const marker = "fittrack_demo_extra_records_v1";
+    if (localStorage.getItem(marker)) return;
+    const users = readUsers();
+    const extraByMember = {
+        "fittrack-demo-1": [["Yoga",18,55,4],["Walking",22,90,6],["Cycling",16,135,5]],
+        "fittrack-demo-2": [["Pilates",24,115,3],["Walking",26,105,5],["Dance Workout",20,155,6]],
+        "fittrack-demo-3": [["Strength Training",28,210,3],["Running",22,250,4],["Walking",19,80,6]],
+        "fittrack-demo-4": [["Yoga",32,105,2],["Dance Workout",27,220,4],["Walking",31,125,6]],
+        "fittrack-demo-5": [["Badminton",35,285,3],["Brisk Walking",24,115,4],["Strength Training",26,185,6]]
+    };
+    const dateOffset = days => { const d = new Date(); d.setDate(d.getDate()-days); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+    let changed = false;
+    users.forEach(user => {
+        const extras = extraByMember[user.id];
+        if (!extras) return;
+        user.activities ||= [];
+        extras.forEach((a, i) => user.activities.push({id:`${user.id}-extra-${i}`,type:a[0],duration:a[1],burned:a[2],date:dateOffset(a[3])}));
+        user.adminSuggestions ||= [];
+        changed = true;
+    });
+    if (changed) saveUsers(users);
+    localStorage.setItem(marker, "done");
+}
+enrichDemoMemberRecords();
+
+// Restore the previous session when possible.
+setupDemoAdmin();
+setupDemoMembers();
+
+const sessionId = localStorage.getItem(SESSION_KEY);
+
+if (sessionId) {
+    const savedUser = readUsers().find(u => u.id === sessionId);
+
+    if (savedUser && savedUser.active !== false) {
+        ensureData(savedUser);
+        currentUser = savedUser;
+        openApp();
+    } else {
+        localStorage.removeItem(SESSION_KEY);
+    }
+}
+</script>
+
+</body>
+</html>
